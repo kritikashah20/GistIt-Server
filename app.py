@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from script import t_on_paras, points_from_para, n_sent_from_para
-import numpy as np
 
 app = Flask(__name__)
 
