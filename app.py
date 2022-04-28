@@ -15,7 +15,6 @@ def hello():
 @cross_origin()
 def abstract():
     data = request.get_json()
-    print('dataaa', data)
     final_summary = t_on_paras(data["text"], data["threshold"])
     return jsonify({"summary": final_summary})
 
