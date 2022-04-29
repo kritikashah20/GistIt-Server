@@ -127,11 +127,11 @@ def t_on_paras(raw_text, threshold=0.45):
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # model = T5ForConditionalGeneration.from_pretrained("Michau/t5-base-en-generate-headline")
-tokenizer = T5Tokenizer.from_pretrained("Michau/t5-base-en-generate-headline")
+# tokenizer = T5Tokenizer.from_pretrained("Michau/t5-base-en-generate-headline")
 # model = model.to(device)
 
 # joblib.dump(model, 'transformer_model.pkl')
-joblib.dump(tokenizer, 'tokenizer_model.pkl')
+# joblib.dump(tokenizer, 'tokenizer_model.pkl')
 
 transformer_from_joblib = joblib.load('transformer_model.pkl')
 tokenizer_from_joblib = joblib.load('tokenizer_model.pkl')
@@ -140,7 +140,7 @@ def points_from_para(raw_text, threshold=0.45):
   segments = utility(raw_text, threshold)
   summarised_seg = []
   for seg in segments:
-    encoding = tokenizer.encode_plus(seg, return_tensors = "pt")
+    encoding = tokenizer_from_joblib.encode_plus(seg, return_tensors = "pt")
     input_ids = encoding["input_ids"].to(device)
     attention_masks = encoding["attention_mask"].to(device)
     beam_outputs = transformer_from_joblib.generate(
@@ -150,7 +150,7 @@ def points_from_para(raw_text, threshold=0.45):
       num_beams = 3,
       early_stopping = True,
     )
-    result = tokenizer.decode(beam_outputs[0][1:-1])
+    result = tokenizer_from_joblib.decode(beam_outputs[0][1:-1])
     summarised_seg.append(result)
     
   return summarised_seg
